@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+$router->group(['prefix' => '/contacts'], function () use ($router) {
+    $router->get('/', 'ContactController@index');
+    $router->post('/', 'ContactController@store');
+    $router->get('/{id:[0-9]+}', 'ContactController@show');
+    $router->put('/{id:[0-9]+}', 'ContactController@update');
+    $router->delete('/{id:[0-9]+}', 'ContactController@destroy');
 });
+
+$router->get('/states', 'StateController@index');
+
