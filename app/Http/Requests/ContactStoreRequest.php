@@ -28,8 +28,19 @@ class ContactStoreRequest extends FormRequest
         return [
             'name' => 'string|required',
             'email' => 'email|required',
+            'number' => 'string|required',
             'phone' => ['string','required', new PhoneRule],
             'zip_code' => ['required', 'string', new ZipCodeRule],
+        ];
+    }
+
+    public function messages(){
+        return [
+            'name.required' => 'The name is required',
+            'email.required' => 'The email is required',
+            'email.email' => 'The email is invalid',
+            'zip_code.required' => 'The Zip code is required',
+            'number.required' => 'The number is required',
         ];
     }
 }

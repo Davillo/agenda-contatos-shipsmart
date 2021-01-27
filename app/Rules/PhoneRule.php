@@ -16,6 +16,6 @@ class PhoneRule implements Rule
 
     public function message()
     {
-        return "Número de celular inválido";
+        return "Invalid phone number";
     }
 }

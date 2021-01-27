@@ -16,6 +16,6 @@ class ZipCodeRule implements Rule
 
     public function message()
     {
-        return "CEP inválido";
+        return "Invalid Zip Code";
     }
 }

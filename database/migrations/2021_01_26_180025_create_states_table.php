@@ -17,7 +17,6 @@ class CreateStatesTable extends Migration
             $table->increments('id');
             $table->string('name', 30)->unique();
             $table->string('initials', 2)->unique();
-            $table->timestamps();
         });
     }
 
