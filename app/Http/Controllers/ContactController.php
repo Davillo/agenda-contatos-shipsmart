@@ -95,9 +95,43 @@ class ContactController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ContactStoreRequest $request, $id)
     {
-        //
+        $data = $request->validated();
+        $zipCode = $data['zip_code'];
+
+        try {
+            $contact = $this->contactRepository->find($id);
+
+            if(!$contact){
+                return response()->json(
+                  ['message' => 'Resource not found'],
+                  Response::HTTP_NOT_FOUND
+                );
+            }
+
+            $addressData = $this->awesomeCepApiService->fetchZipCodeData($zipCode);
+
+            if(!$addressData){
+                return response()->json(['message'=> 'Invalid Zip Code.'], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $completeData = array_merge(
+                $data,
+                [
+                    'street' => $addressData->address,
+                    'state' => $addressData->state,
+                    'neighborhood' => $addressData->district,
+                    'city' => $addressData->city
+                ]
+            );
+
+            $contact->update($completeData);
+
+            return response()->json(['data' => $contact], Response::HTTP_OK);
+        } catch (ClientException $exception) {
+            return response()->json(['message' => 'Zip Code not found', 'error' => $exception->getMessage()], Response::HTTP_NOT_FOUND);
+        }
     }
 
     /**
